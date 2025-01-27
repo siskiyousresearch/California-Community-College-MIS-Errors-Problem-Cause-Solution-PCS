@@ -13,10 +13,37 @@
             background-color: #f4f4f4;
         }
         header {
-            background: #0073e6;
-            color: #fff;
-            padding: 1rem 0;
-            text-align: center;
+            background-color: #ffffff;
+            color: #003865;
+            padding: 20px 0;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header img {
+            max-height: 50px;
+            margin-left: 20px;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            flex-grow: 1;
+            margin-left: 10px;
+            font-weight: bold;
+            color: #003865;
+        }
+        header nav {
+            margin-right: 20px;
+        }
+        header nav a {
+            color: #003865;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        header nav a:hover {
+            text-decoration: underline;
         }
         .container {
             max-width: 800px;
@@ -57,40 +84,58 @@
             max-width: 100%;
             margin-top: 10px;
         }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+        .sidebar.open {
+            right: 0;
+        }
+        .sidebar-header {
+            padding: 1rem;
+            background-color: #003865;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        .sidebar-content {
+            padding: 1rem;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+        .overlay.active {
+            display: block;
+        }
     </style>
     <script>
-        function showErrors() {
-            const mainCategory = document.getElementById('main-category').value;
-            const subCategory = document.getElementById('sub-category').value;
-            const errorDetails = document.getElementById('error-details');
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const isOpen = sidebar.classList.contains('open');
 
-            if (mainCategory && subCategory) {
-                errorDetails.innerHTML = `<h3>${mainCategory} - ${subCategory}</h3><p>Details about ${subCategory} in the ${mainCategory} category will be shown here.</p>`;
-                errorDetails.style.display = 'block';
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
             } else {
-                errorDetails.style.display = 'none';
-            }
-        }
-
-        function updateSubCategories() {
-            const mainCategory = document.getElementById('main-category').value;
-            const subCategoryDropdown = document.getElementById('sub-category');
-
-            const categories = {
-                "Syntactical Errors": ["AA", "CC", "CB", "CW", "EB", "EBD", "EJ", "FA", "GI", "SA", "SB", "SCD", "SC", "SD", "SE", "SF", "SG", "SI", "SK", "SL", "SM", "SP", "SS", "STD", "SV", "SX", "SXD", "SY", "XF", "XE", "XB"],
-                "Referential Errors": ["AA", "CC", "CB", "CW", "EB", "EBD", "EJ", "FA", "GI", "SA", "SB", "SCD", "SC", "SD", "SE", "SF", "SG", "SI", "SK", "SL", "SM", "SP", "SS", "STD", "SV", "SX", "SXD", "SY", "XF", "XE", "XB"],
-                "Quality Errors": ["AA", "CC", "CB", "CW", "EB", "EBD", "EJ", "FA", "GI", "SA", "SB", "SCD", "SC", "SD", "SE", "SF", "SG", "SI", "SK", "SL", "SM", "SP", "SS", "STD", "SV", "SX", "SXD", "SY", "XF", "XE", "XB"]
-            };
-
-            subCategoryDropdown.innerHTML = '<option value="">Select Specific Error</option>';
-
-            if (categories[mainCategory]) {
-                categories[mainCategory].forEach(error => {
-                    const option = document.createElement('option');
-                    option.value = error;
-                    option.textContent = error;
-                    subCategoryDropdown.appendChild(option);
-                });
+                sidebar.classList.add('open');
+                overlay.classList.add('active');
             }
         }
 
@@ -112,6 +157,7 @@
         }
 
         function submitData() {
+            const sis = document.getElementById('sis-selection').value;
             const dataElement = document.getElementById('data-element').value;
             const fileType = document.getElementById('file-type').value;
             const dictionaryCode = document.getElementById('dictionary-code').value;
@@ -120,6 +166,7 @@
             const info1 = document.getElementById('info1').value;
 
             console.log({
+                sis,
                 dataElement,
                 fileType,
                 dictionaryCode,
@@ -134,8 +181,11 @@
 </head>
 <body>
     <header>
+        <img src="https://www.cccco.edu/assets/img/CCCCO-Logo.png" alt="CCC Logo">
         <h1>MIS Errors Catalog</h1>
-        <p>A repository of documented MIS errors for the California Community College system (Banner)</p>
+        <nav>
+            <a href="https://www.cccco.edu">Home</a>
+        </nav>
     </header>
 
     <div class="container">
@@ -152,28 +202,31 @@
         </section>
 
         <section>
+          <button onclick="toggleSidebar()">Add New Error</button>
+          
             <h2>Select Error Category</h2>
-            <label for="main-category">Main Category:</label>
-            <select id="main-category" onchange="updateSubCategories(); showErrors();">
-                <option value="">Select Main Category</option>
+            <label for="main-category">Error Type:</label>
+            <select id="main-category">
+                <option value="">Select Error Type</option>
                 <option value="Syntactical Errors">Syntactical Errors</option>
                 <option value="Referential Errors">Referential Errors</option>
                 <option value="Quality Errors">Quality Errors</option>
             </select>
 
-            <label for="sub-category">Specific Error:</label>
-            <select id="sub-category" onchange="showErrors();">
-                <option value="">Select Specific Error</option>
+            <label for="sub-category">File Type</label>
+            <select id="sub-category">
+                <option value="">Select File Type</option>
             </select>
 
-            <div id="error-details" class="error-details"></div>
+            
         </section>
+    </div>
 
-        <section>
-            <h2>Enter Error Details</h2>
-            <label for="data-element">Data Element:</label>
-            <input type="text" id="data-element" placeholder="Enter alphanumeric value">
+    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
 
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">Enter Error Details</div>
+        <div class="sidebar-content">
             <label for="file-type">File Type:</label>
             <input type="text" id="file-type" placeholder="Enter file type (e.g., SE, SX)">
 
@@ -181,7 +234,7 @@
             <input type="text" id="dictionary-code" placeholder="Enter dictionary element code (e.g., STD7)">
 
             <label for="dictionary-value">Data Dictionary Element Value:</label>
-            <input type="text" id="dictionary-value" placeholder="Enter dictionary element value">
+            <input type="text" id="dictionary-value" placeholder="For IDs, enter SSN or SNumb as the ID to the example">
 
             <label for="error-description">Error Description:</label>
             <textarea id="error-description" placeholder="Enter error description"></textarea>
@@ -194,12 +247,11 @@
             <div id="image-preview"></div>
 
             <button onclick="submitData()">Submit</button>
-        </section>
+        </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 MIS Errors Catalog | Created by [Your Name]</p>
+        <p>&copy; 2024 MIS Errors Catalog | Created by JT @ Siskiyous</p>
     </footer>
 </body>
 </html>
-
