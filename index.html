@@ -310,8 +310,49 @@
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">Enter Error Details</div>
         <div class="sidebar-content">
-            <label for="file-type">File Type:</label>
-            <input type="text" id="file-type" placeholder="Enter file type (e.g., SE, SX)">
+             <label for="sidebar-sis">Student Information System:</label>
+            <select id="sidebar-sis" class="filter-dropdown">
+                <option value="">Select Student Information System</option>
+                <option value="Colleague">Colleague</option>
+                <option value="Banner">Banner</option>
+                <option value="PeopleSoft">PeopleSoft</option>
+                <option value="Other">Other</option>
+            </select>
+            
+            <label for="sidebar-file-type">File Type:</label>
+            <select id="sidebar-file-type" class="filter-dropdown">
+                <option value="">Select File Type</option>
+                <option value="SB">SB</option>
+                <option value="SG">SG</option>
+                <option value="CB">CB</option>
+                <option value="XF">XF</option>
+                <option value="XE">XE</option>
+                <option value="SX">SX</option>
+                <option value="SY">SY</option>
+                <option value="SC">SC</option>
+                <option value="CW">CW</option>
+                <option value="SD">SD</option>
+                <option value="SE">SE</option>
+                <option value="SM">SM</option>
+                <option value="SS">SS</option>
+                <option value="SV">SV</option>
+                <option value="SL">SL</option>
+                <option value="SA">SA</option>
+                <option value="AA">AA</option>
+                <option value="SF">SF</option>
+                <option value="FA">FA</option>
+                <option value="SP">SP</option>
+                <option value="EB">EB</option>
+                <option value="EJ">EJ</option>
+                <option value="CC">CC</option>
+                <option value="GI">GI</option>
+                <option value="SI">SI</option>
+                <option value="SCD">SCD</option>
+                <option value="STD">STD</option>
+                <option value="SXD">SXD</option>
+                <option value="XBD">XBD</option>
+                <option value="EBD">EBD</option>              
+            </select>
 
             <label for="dictionary-code">Data Dictionary Element Code:</label>
             <input type="text" id="dictionary-code" placeholder="Enter dictionary element code (e.g., STD7)">
