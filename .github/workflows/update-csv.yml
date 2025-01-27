@@ -1,0 +1,60 @@
+name: Update CSV File
+
+on:
+  push:
+    paths:
+      - errors.csv
+    branches:
+      - main
+
+jobs:
+  update-csv:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Dependencies
+        run: pip install pandas
+
+      - name: Append to CSV
+        run: |
+          python <<EOF
+          import pandas as pd
+          from datetime import datetime
+
+          # Read the existing CSV file
+          csv_file = "errors.csv"
+          df = pd.read_csv(csv_file)
+
+          # Example new row to append
+          new_row = {
+              "Student Information System": "Colleague",
+              "Data Element": "New Element",
+              "File Type": "SE",
+              "Data Dictionary Element Code": "STD8",
+              "Data Dictionary Element Value": "Value",
+              "Error Description": "Test Error Description",
+              "Info 1": "Test Info",
+              "Solution": "Proposed Solution"
+          }
+
+          # Append new row
+          df = df.append(new_row, ignore_index=True)
+
+          # Save updated CSV
+          df.to_csv(csv_file, index=False)
+          EOF
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add errors.csv
+          git commit -m "Update errors.csv"
+          git push
