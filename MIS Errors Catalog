@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIS Errors Catalog</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #0073e6;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #f9f9f9;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MIS Errors Catalog</h1>
+        <p>A repository of documented MIS errors for the California Community College system (Banner)</p>
+    </header>
+
+    <div class="container">
+        <section>
+            <h2>Introduction</h2>
+            <p>This page catalogs common MIS errors encountered within the California Community College system for Banner. Each entry provides the error code, description, potential causes, and solutions.</p>
+        </section>
+
+        <section>
+            <h2>Error List</h2>
+            <ul>
+                <li>
+                    <h3>Error Code: <code>ED001</code></h3>
+                    <p><strong>Description:</strong> Missing or invalid student enrollment status.</p>
+                    <p><strong>Potential Causes:</strong></p>
+                    <ul>
+                        <li>Incorrect status code entered.</li>
+                        <li>Missing enrollment record in the current term.</li>
+                    </ul>
+                    <p><strong>Solution:</strong> Verify the student's enrollment status and update the Banner record under the <code>SGASTDN</code> form.</p>
+                </li>
+
+                <li>
+                    <h3>Error Code: <code>SCFF001</code></h3>
+                    <p><strong>Description:</strong> Invalid financial aid disbursement data.</p>
+                    <p><strong>Potential Causes:</strong></p>
+                    <ul>
+                        <li>Mismatched student ID in financial aid records.</li>
+                        <li>Missing Pell or AB540 status for applicable students.</li>
+                    </ul>
+                    <p><strong>Solution:</strong> Cross-check financial aid data in the <code>RPAAWRD</code> form and ensure SCFF eligibility fields are populated correctly.</p>
+                </li>
+
+                <!-- Add more errors here -->
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 MIS Errors Catalog | Created by [Your Name]</p>
+    </footer>
+</body>
+</html>
