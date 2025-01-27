@@ -29,30 +29,59 @@
         h1, h2, h3 {
             color: #333;
         }
-        ul {
-            list-style: none;
-            padding: 0;
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
         }
-        li {
+        .error-details {
+            display: none;
             background: #f9f9f9;
-            margin: 0.5rem 0;
+            margin-top: 1rem;
             padding: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        code {
-            background: #f4f4f4;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: monospace;
-        }
-        footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
     </style>
+    <script>
+        function showErrors() {
+            const mainCategory = document.getElementById('main-category').value;
+            const subCategory = document.getElementById('sub-category').value;
+            const errorDetails = document.getElementById('error-details');
+
+            if (mainCategory && subCategory) {
+                errorDetails.innerHTML = `<h3>${mainCategory} - ${subCategory}</h3><p>Details about ${subCategory} in the ${mainCategory} category will be shown here.</p>`;
+                errorDetails.style.display = 'block';
+            } else {
+                errorDetails.style.display = 'none';
+            }
+        }
+
+        function updateSubCategories() {
+            const mainCategory = document.getElementById('main-category').value;
+            const subCategoryDropdown = document.getElementById('sub-category');
+
+            const categories = {
+                "Syntactical Errors": ["AA", "CC", "CB", "CW", "EB", "EBD", "EJ", "FA", "GI", "SA", "SB", "SCD", "SC", "SD", "SE", "SF", "SG", "SI", "SK", "SL", "SM", "SP", "SS", "STD", "SV", "SX", "SXD", "SY", "XF", "XE", "XB"],
+                "Referential Errors": ["AA", "CC", "CB", "CW", "EB", "EBD", "EJ", "FA", "GI", "SA", "SB", "SCD", "SC", "SD", "SE", "SF", "SG", "SI", "SK", "SL", "SM", "SP", "SS", "STD", "SV", "SX", "SXD", "SY", "XF", "XE", "XB"],
+                "Quality Errors": ["AA", "CC", "CB", "CW", "EB", "EBD", "EJ", "FA", "GI", "SA", "SB", "SCD", "SC", "SD", "SE", "SF", "SG", "SI", "SK", "SL", "SM", "SP", "SS", "STD", "SV", "SX", "SXD", "SY", "XF", "XE", "XB"]
+            };
+
+            subCategoryDropdown.innerHTML = '<option value="">Select Specific Error</option>';
+
+            if (categories[mainCategory]) {
+                categories[mainCategory].forEach(error => {
+                    const option = document.createElement('option');
+                    option.value = error;
+                    option.textContent = error;
+                    subCategoryDropdown.appendChild(option);
+                });
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -62,37 +91,21 @@
 
     <div class="container">
         <section>
-            <h2>Introduction</h2>
-            <p>This page catalogs common MIS errors encountered within the California Community College system for Banner. Each entry provides the error code, description, potential causes, and solutions.</p>
-        </section>
+            <h2>Select Error Category</h2>
+            <label for="main-category">Main Category:</label>
+            <select id="main-category" onchange="updateSubCategories(); showErrors();">
+                <option value="">Select Main Category</option>
+                <option value="Syntactical Errors">Syntactical Errors</option>
+                <option value="Referential Errors">Referential Errors</option>
+                <option value="Quality Errors">Quality Errors</option>
+            </select>
 
-        <section>
-            <h2>Error List</h2>
-            <ul>
-                <li>
-                    <h3>Error Code: <code>ED001</code></h3>
-                    <p><strong>Description:</strong> Missing or invalid student enrollment status.</p>
-                    <p><strong>Potential Causes:</strong></p>
-                    <ul>
-                        <li>Incorrect status code entered.</li>
-                        <li>Missing enrollment record in the current term.</li>
-                    </ul>
-                    <p><strong>Solution:</strong> Verify the student's enrollment status and update the Banner record under the <code>SGASTDN</code> form.</p>
-                </li>
+            <label for="sub-category">Specific Error:</label>
+            <select id="sub-category" onchange="showErrors();">
+                <option value="">Select Specific Error</option>
+            </select>
 
-                <li>
-                    <h3>Error Code: <code>SCFF001</code></h3>
-                    <p><strong>Description:</strong> Invalid financial aid disbursement data.</p>
-                    <p><strong>Potential Causes:</strong></p>
-                    <ul>
-                        <li>Mismatched student ID in financial aid records.</li>
-                        <li>Missing Pell or AB540 status for applicable students.</li>
-                    </ul>
-                    <p><strong>Solution:</strong> Cross-check financial aid data in the <code>RPAAWRD</code> form and ensure SCFF eligibility fields are populated correctly.</p>
-                </li>
-
-                <!-- Add more errors here -->
-            </ul>
+            <div id="error-details" class="error-details"></div>
         </section>
     </div>
 
