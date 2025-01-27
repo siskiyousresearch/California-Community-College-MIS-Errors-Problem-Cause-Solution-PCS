@@ -214,6 +214,37 @@
             }
         }
 
+        async function submitData() {
+            const sis = document.getElementById('sis-filter').value;
+            const dataElement = document.getElementById('file-type').value;
+            const fileType = document.getElementById('file-type').value;
+            const dictionaryCode = document.getElementById('dictionary-code').value;
+            const dictionaryValue = document.getElementById('dictionary-value').value;
+            const errorDescription = document.getElementById('error-description').value;
+            const info1 = document.getElementById('info1').value;
+            const solution = document.getElementById('solution').value;
+
+            const newRow = `"${sis}","${dataElement}","${fileType}","${dictionaryCode}","${dictionaryValue}","${errorDescription}","${info1}","${solution}"
+`;
+
+            try {
+                const response = await fetch('errors.csv');
+                const existingData = await response.text();
+                const updatedData = existingData + newRow;
+
+                const blob = new Blob([updatedData], { type: 'text/csv' });
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.download = 'errors.csv';
+                downloadLink.click();
+
+                alert('Data added successfully!');
+                toggleSidebar();
+            } catch (error) {
+                console.error('Error adding data:', error);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', loadCSV);
     </script>
 </head>
