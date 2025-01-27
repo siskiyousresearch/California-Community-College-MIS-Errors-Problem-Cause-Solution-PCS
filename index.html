@@ -91,6 +91,18 @@
 
     <div class="container">
         <section>
+            <h2>Select Student Information System</h2>
+            <label for="sis-selection">Student Information System:</label>
+            <select id="sis-selection">
+                <option value="">Select System</option>
+                <option value="Colleague">Colleague</option>
+                <option value="Banner">Banner</option>
+                <option value="PeopleSoft">PeopleSoft</option>
+                <option value="Other">Other</option>
+            </select>
+        </section>
+
+        <section>
             <h2>Select Error Category</h2>
             <label for="main-category">Main Category:</label>
             <select id="main-category" onchange="updateSubCategories(); showErrors();">
