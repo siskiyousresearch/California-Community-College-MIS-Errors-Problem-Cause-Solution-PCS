@@ -214,36 +214,51 @@
             }
         }
 
-        async function submitData() {
-            const sis = document.getElementById('sis-filter').value;
-            const dataElement = document.getElementById('file-type').value;
-            const fileType = document.getElementById('file-type').value;
-            const dictionaryCode = document.getElementById('dictionary-code').value;
-            const dictionaryValue = document.getElementById('dictionary-value').value;
-            const errorDescription = document.getElementById('error-description').value;
-            const info1 = document.getElementById('info1').value;
-            const solution = document.getElementById('solution').value;
+async function submitData() {
+    const token = "YOUR_PERSONAL_ACCESS_TOKEN"; // Replace with your GitHub PAT
+    const owner = "your-username"; // Replace with your GitHub username
+    const repo = "your-repo"; // Replace with your GitHub repository name
+    const workflowFileName = "update-csv.yml"; // The name of your workflow file
 
-            const newRow = `"${sis}","${dataElement}","${fileType}","${dictionaryCode}","${dictionaryValue}","${errorDescription}","${info1}","${solution}"
-`;
+    // Gather form data
+    const sis = document.getElementById("sidebar-sis").value;
+    const fileType = document.getElementById("sidebar-file-type").value;
+    const dictionaryCode = document.getElementById("dictionary-code").value;
+    const dictionaryValue = document.getElementById("dictionary-value").value;
+    const errorDescription = document.getElementById("error-description").value;
+    const info1 = document.getElementById("info1").value;
+    const solution = document.getElementById("solution").value;
 
-            try {
-                const response = await fetch('errors.csv');
-                const existingData = await response.text();
-                const updatedData = existingData + newRow;
+    // Format data to pass as an input
+    const inputs = {
+        NEW_ROW: `"${sis}","${fileType}","${dictionaryCode}","${dictionaryValue}","${errorDescription}","${info1}","${solution}"`
+    };
 
-                const blob = new Blob([updatedData], { type: 'text/csv' });
-                const downloadLink = document.createElement('a');
-                downloadLink.href = URL.createObjectURL(blob);
-                downloadLink.download = 'errors.csv';
-                downloadLink.click();
+    try {
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflowFileName}/dispatches`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Accept": "application/vnd.github+json"
+            },
+            body: JSON.stringify({
+                ref: "main", // Branch to run the workflow on
+                inputs: inputs
+            })
+        });
 
-                alert('Data added successfully!');
-                toggleSidebar();
-            } catch (error) {
-                console.error('Error adding data:', error);
-            }
+        if (response.ok) {
+            alert("Data submitted successfully! Workflow triggered.");
+        } else {
+            console.error("Error triggering workflow:", response.status, await response.text());
+            alert("Failed to submit data.");
         }
+    } catch (error) {
+        console.error("Error triggering workflow:", error);
+        alert("An error occurred while submitting data.");
+    }
+}
+
 
         document.addEventListener('DOMContentLoaded', loadCSV);
     </script>
