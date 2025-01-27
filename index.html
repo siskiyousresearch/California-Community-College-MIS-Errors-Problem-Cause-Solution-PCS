@@ -29,13 +29,21 @@
         h1, h2, h3 {
             color: #333;
         }
-        select {
+        select, input, textarea {
             width: 100%;
             padding: 0.5rem;
-            margin: 1rem 0;
+            margin: 0.5rem 0;
             border-radius: 5px;
             border: 1px solid #ddd;
             font-size: 1rem;
+        }
+        button {
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
         }
         .error-details {
             display: none;
@@ -44,6 +52,10 @@
             padding: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
+        }
+        #image-preview img {
+            max-width: 100%;
+            margin-top: 10px;
         }
     </style>
     <script>
@@ -80,6 +92,43 @@
                     subCategoryDropdown.appendChild(option);
                 });
             }
+        }
+
+        function previewImage(event) {
+            const imagePreview = document.getElementById('image-preview');
+            imagePreview.innerHTML = ''; // Clear previous images
+            const files = event.target.files;
+
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Uploaded Screenshot';
+                    imagePreview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function submitData() {
+            const dataElement = document.getElementById('data-element').value;
+            const fileType = document.getElementById('file-type').value;
+            const dictionaryCode = document.getElementById('dictionary-code').value;
+            const dictionaryValue = document.getElementById('dictionary-value').value;
+            const errorDescription = document.getElementById('error-description').value;
+            const info1 = document.getElementById('info1').value;
+
+            console.log({
+                dataElement,
+                fileType,
+                dictionaryCode,
+                dictionaryValue,
+                errorDescription,
+                info1
+            });
+
+            alert('Data submitted successfully!');
         }
     </script>
 </head>
@@ -119,6 +168,33 @@
 
             <div id="error-details" class="error-details"></div>
         </section>
+
+        <section>
+            <h2>Enter Error Details</h2>
+            <label for="data-element">Data Element:</label>
+            <input type="text" id="data-element" placeholder="Enter alphanumeric value">
+
+            <label for="file-type">File Type:</label>
+            <input type="text" id="file-type" placeholder="Enter file type (e.g., SE, SX)">
+
+            <label for="dictionary-code">Data Dictionary Element Code:</label>
+            <input type="text" id="dictionary-code" placeholder="Enter dictionary element code (e.g., STD7)">
+
+            <label for="dictionary-value">Data Dictionary Element Value:</label>
+            <input type="text" id="dictionary-value" placeholder="Enter dictionary element value">
+
+            <label for="error-description">Error Description:</label>
+            <textarea id="error-description" placeholder="Enter error description"></textarea>
+
+            <label for="info1">Info 1:</label>
+            <input type="text" id="info1" placeholder="Enter additional info">
+
+            <label for="screenshot-upload">Upload Screenshot/Image:</label>
+            <input type="file" id="screenshot-upload" accept="image/*" onchange="previewImage(event)">
+            <div id="image-preview"></div>
+
+            <button onclick="submitData()">Submit</button>
+        </section>
     </div>
 
     <footer>
@@ -126,3 +202,4 @@
     </footer>
 </body>
 </html>
+
