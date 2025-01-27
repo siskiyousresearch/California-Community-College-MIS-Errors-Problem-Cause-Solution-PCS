@@ -46,7 +46,7 @@
             text-decoration: underline;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 2rem auto;
             background: #fff;
             padding: 2rem;
@@ -80,105 +80,89 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-        #image-preview img {
-            max-width: 100%;
-            margin-top: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
         }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100%;
-            background-color: #ffffff;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            z-index: 1000;
+        table, th, td {
+            border: 1px solid #ddd;
         }
-        .sidebar.open {
-            right: 0;
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
         }
-        .sidebar-header {
-            padding: 1rem;
+        th {
             background-color: #003865;
             color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-align: center;
         }
-        .sidebar-content {
-            padding: 1rem;
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
         }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
+        .filter-dropdown {
+            width: 200px;
         }
-        .overlay.active {
-            display: block;
+        .search-input {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            width: 300px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
     </style>
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const isOpen = sidebar.classList.contains('open');
+        async function loadCSV() {
+            try {
+                const response = await fetch('errors.csv');
+                const data = await response.text();
+                const rows = data.split('\n').filter(row => row.trim() !== '');
 
-            if (isOpen) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-            } else {
-                sidebar.classList.add('open');
-                overlay.classList.add('active');
+                const table = document.getElementById('errors-table');
+                const tbody = table.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                rows.slice(1).forEach(row => {
+                    const columns = row.split(',');
+                    const tr = document.createElement('tr');
+
+                    columns.forEach(column => {
+                        const td = document.createElement('td');
+                        td.textContent = column.replace(/"/g, '');
+                        tr.appendChild(td);
+                    });
+
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error loading CSV:', error);
             }
         }
 
-        function previewImage(event) {
-            const imagePreview = document.getElementById('image-preview');
-            imagePreview.innerHTML = ''; // Clear previous images
-            const files = event.target.files;
+        function filterTable() {
+            const sisFilter = document.getElementById('sis-filter').value.toLowerCase();
+            const fileTypeFilter = document.getElementById('file-type-filter').value.toLowerCase();
+            const searchValue = document.getElementById('search-input').value.toLowerCase();
 
-            for (const file of files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.alt = 'Uploaded Screenshot';
-                    imagePreview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+            const rows = document.querySelectorAll('#errors-table tbody tr');
 
-        function submitData() {
-            const sis = document.getElementById('sis-selection').value;
-            const dataElement = document.getElementById('data-element').value;
-            const fileType = document.getElementById('file-type').value;
-            const dictionaryCode = document.getElementById('dictionary-code').value;
-            const dictionaryValue = document.getElementById('dictionary-value').value;
-            const errorDescription = document.getElementById('error-description').value;
-            const info1 = document.getElementById('info1').value;
-            const solution = document.getElementById('solution').value;
+            rows.forEach(row => {
+                const cells = Array.from(row.querySelectorAll('td'));
 
-            console.log({
-                sis,
-                dataElement,
-                fileType,
-                dictionaryCode,
-                dictionaryValue,
-                errorDescription,
-                info1,
-                solution
+                const matchesSIS = sisFilter === '' || cells[0].textContent.toLowerCase() === sisFilter;
+                const matchesFileType = fileTypeFilter === '' || cells[2].textContent.toLowerCase() === fileTypeFilter;
+                const matchesSearch = cells.some(cell => cell.textContent.toLowerCase().includes(searchValue));
+
+                if (matchesSIS && matchesFileType && matchesSearch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
             });
-
-            alert('Data submitted successfully!');
         }
+
+        document.addEventListener('DOMContentLoaded', loadCSV);
     </script>
 </head>
 <body>
@@ -193,35 +177,48 @@
 
     <div class="container">
         <section>
-            <h2>Select Student Information System</h2>
-            <label for="sis-selection">Student Information System:</label>
-            <select id="sis-selection">
-                <option value="">Select System</option>
-                <option value="Colleague">Colleague</option>
-                <option value="Banner">Banner</option>
-                <option value="PeopleSoft">PeopleSoft</option>
-                <option value="Other">Other</option>
-            </select>
+            <h2>Filter Errors</h2>
+            <div class="filter-section">
+                <select id="sis-filter" class="filter-dropdown" onchange="filterTable()">
+                    <option value="">Select Student Information System</option>
+                    <option value="Colleague">Colleague</option>
+                    <option value="Banner">Banner</option>
+                    <option value="PeopleSoft">PeopleSoft</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <select id="file-type-filter" class="filter-dropdown" onchange="filterTable()">
+                    <option value="">Select File Type</option>
+                    <option value="SE">SE</option>
+                    <option value="SX">SX</option>
+                    <option value="STD7">STD7</option>
+                    <option value="XE">XE</option>
+                </select>
+
+                <input type="text" id="search-input" class="search-input" placeholder="Search..." oninput="filterTable()">
+            </div>
+
+            <table id="errors-table">
+                <thead>
+                    <tr>
+                        <th>Student Information System</th>
+                        <th>Data Element</th>
+                        <th>File Type</th>
+                        <th>Data Dictionary Element Code</th>
+                        <th>Data Dictionary Element Value</th>
+                        <th>Error Description</th>
+                        <th>Info 1</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic rows will be inserted here -->
+                </tbody>
+            </table>
         </section>
 
         <section>
-          <button onclick="toggleSidebar()">Add New Error</button>
-          
-            <h2>Select Error Category</h2>
-            <label for="main-category">Error Type:</label>
-            <select id="main-category">
-                <option value="">Select Error Type</option>
-                <option value="Syntactical Errors">Syntactical Errors</option>
-                <option value="Referential Errors">Referential Errors</option>
-                <option value="Quality Errors">Quality Errors</option>
-            </select>
-
-            <label for="sub-category">File Type</label>
-            <select id="sub-category">
-                <option value="">Select File Type</option>
-            </select>
-
-            
+            <button onclick="toggleSidebar()">Add New Error</button>
         </section>
     </div>
 
@@ -237,7 +234,7 @@
             <input type="text" id="dictionary-code" placeholder="Enter dictionary element code (e.g., STD7)">
 
             <label for="dictionary-value">Data Dictionary Element Value:</label>
-            <input type="text" id="dictionary-value" placeholder="For IDs, enter SSN or SNumb as the ID to the example">
+            <input type="text" id="dictionary-value" placeholder="Enter dictionary element value">
 
             <label for="error-description">Error Description:</label>
             <textarea id="error-description" placeholder="Enter error description"></textarea>
@@ -248,8 +245,11 @@
             <label for="solution">Solution:</label>
             <textarea id="solution" placeholder="Enter proposed solution"></textarea>
 
-            <label for="screenshot-upload">Upload Screenshot/Image:</label>
-            <input type="file" id="screenshot-upload" accept="image/*" onchange="previewImage(event)">
+            <div id="upload-area" class="upload-area" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                Drag & Drop Screenshot or Paste Image Here
+                <input type="file" id="screenshot-upload" accept="image/*" onchange="previewImage(event)">
+            </div>
+
             <div id="image-preview"></div>
 
             <button onclick="submitData()">Submit</button>
