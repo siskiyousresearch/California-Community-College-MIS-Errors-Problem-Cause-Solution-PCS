@@ -152,54 +152,89 @@
         }
     </style>
     <script>
-        async function loadCSV() {
-            try {
-                const response = await fetch('errors.csv');
-                const data = await response.text();
-                const rows = data.split('\n').filter(row => row.trim() !== '');
+async function loadCSV() {
+    try {
+        const response = await fetch('errors.csv');
+        const data = await response.text();
+        const rows = data.split('\n').filter(row => row.trim() !== '');
 
-                const table = document.getElementById('errors-table');
-                const tbody = table.querySelector('tbody');
-                tbody.innerHTML = '';
+        const table = document.getElementById('errors-table');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
 
-                rows.slice(1).forEach(row => {
-                    const columns = row.split(',');
-                    const tr = document.createElement('tr');
+        const fileTypeSet = new Set(); // To store unique file types
+        const errorTypeSet = new Set(); // To store unique error types
 
-                    columns.forEach(column => {
-                        const td = document.createElement('td');
-                        td.textContent = column.replace(/"/g, '');
-                        tr.appendChild(td);
-                    });
+        rows.slice(1).forEach(row => {
+            const columns = row.split(',');
 
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error('Error loading CSV:', error);
-            }
-        }
+            // Assuming the column indexes:
+            const fileType = columns[2]?.replace(/"/g, '').trim();
+            const errorType = columns[8]?.replace(/"/g, '').trim(); // Assuming Error Type is the 9th column
 
-        function filterTable() {
-            const sisFilter = document.getElementById('sis-filter').value.toLowerCase();
-            const fileTypeFilter = document.getElementById('file-type-filter').value.toLowerCase();
-            const searchValue = document.getElementById('search-input').value.toLowerCase();
+            if (fileType) fileTypeSet.add(fileType);
+            if (errorType) errorTypeSet.add(errorType);
 
-            const rows = document.querySelectorAll('#errors-table tbody tr');
-
-            rows.forEach(row => {
-                const cells = Array.from(row.querySelectorAll('td'));
-
-                const matchesSIS = sisFilter === '' || cells[0].textContent.toLowerCase() === sisFilter;
-                const matchesFileType = fileTypeFilter === '' || cells[2].textContent.toLowerCase() === fileTypeFilter;
-                const matchesSearch = cells.some(cell => cell.textContent.toLowerCase().includes(searchValue));
-
-                if (matchesSIS && matchesFileType && matchesSearch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
+            // Populate the table
+            const tr = document.createElement('tr');
+            columns.forEach(column => {
+                const td = document.createElement('td');
+                td.textContent = column.replace(/"/g, '').trim();
+                tr.appendChild(td);
             });
+            tbody.appendChild(tr);
+        });
+
+        // Populate the File Type dropdown dynamically
+        const fileTypeFilter = document.getElementById('file-type-filter');
+        fileTypeFilter.innerHTML = '<option value="">Select File Type</option>'; // Reset options
+        fileTypeSet.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            fileTypeFilter.appendChild(option);
+        });
+
+        // Populate the Error Type dropdown dynamically
+        const errorTypeFilter = document.getElementById('error-type-filter');
+        errorTypeFilter.innerHTML = '<option value="">Select Error Type</option>'; // Reset options
+        errorTypeSet.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            errorTypeFilter.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error('Error loading CSV:', error);
+    }
+}
+
+
+function filterTable() {
+    const sisFilter = document.getElementById('sis-filter').value.toLowerCase();
+    const fileTypeFilter = document.getElementById('file-type-filter').value.toLowerCase();
+    const errorTypeFilter = document.getElementById('error-type-filter').value.toLowerCase();
+    const searchValue = document.getElementById('search-input').value.toLowerCase();
+
+    const rows = document.querySelectorAll('#errors-table tbody tr');
+
+    rows.forEach(row => {
+        const cells = Array.from(row.querySelectorAll('td'));
+
+        const matchesSIS = sisFilter === '' || cells[0].textContent.toLowerCase() === sisFilter;
+        const matchesFileType = fileTypeFilter === '' || cells[2].textContent.toLowerCase() === fileTypeFilter;
+        const matchesErrorType = errorTypeFilter === '' || cells[8].textContent.toLowerCase() === errorTypeFilter;
+        const matchesSearch = cells.some(cell => cell.textContent.toLowerCase().includes(searchValue));
+
+        if (matchesSIS && matchesFileType && matchesErrorType && matchesSearch) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
         }
+    });
+}
+
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -284,6 +319,13 @@ async function submitData() {
                     <option value="PeopleSoft">PeopleSoft</option>
                     <option value="Other">Other</option>
                 </select>
+
+            <select id="error-type-filter" class="filter-dropdown" onchange="filterTable()">
+                <option value="">Select Error Type</option>
+                <option value="Syntactical">Syntactical</option>
+                <option value="Referential">Referential</option>
+                <option value="Quality">Quality</option>
+            </select>
 
                 <select id="file-type-filter" class="filter-dropdown" onchange="filterTable()">
                     <option value="">Select File Type</option>
