@@ -4,5 +4,5 @@ Banner,Syntactical,XE,,,Sample error description 2,,,
 PeopleSoft,Syntactical,XX,,,Sample error description 3,,,
 Banner,Syntactical,CB,CB24,X,INVALID VALUE,WORK 0529,,"SCADETL>Supplemental Data>Supplemental Data>""Program Status"" - Check SCADETL in Banner for a valid value"
 Banner,Syntactical,CB,CB00,,INVALID VALUE,CCCOOO624566,,Verify the Course Control Number has Zero's instead of O's
-Banner,Syntactical,CB,CB11,A,INVALID VALUE,ADJ 9080,CCC000632502,"SCADETL>Supplemental Data>Supplemental Data>""Classification"" - Old classification code, check SCADETL in Banner for a valid code"
+Banner,Syntactical,CB,CB11,A,INVALID VALUE,ADJ 9080,CCC000632502,"SCADETL>Supplemental Data>Supplemental Data>""Classification"" - Old classification code check SCADETL in Banner for a valid code"
 Banner,Syntactical,CB,CB03,200100,NONCREDIT CATEGORY DOES NOT HAVE A VALID TOP CODE ,PSY 0505,CCC000613061,"SCADETL>Supplemental Data>Supplemental Data>""Taxonomy of Program"" - Verify the Top Code in COCI matches the Top Code in SCADETL Banner"
