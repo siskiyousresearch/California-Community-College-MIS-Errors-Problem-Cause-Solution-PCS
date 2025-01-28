@@ -312,6 +312,9 @@ async function submitData() {
 
     <div class="container">
         <section>
+        <section>
+            <button onclick="toggleSidebar()">Add New Error</button>
+        </section>
             <h2>Filter Errors</h2>
             <div class="filter-section">
                 <select id="sis-filter" class="filter-dropdown" onchange="filterTable()">
@@ -361,9 +364,7 @@ async function submitData() {
             </table>
         </section>
 
-        <section>
-            <button onclick="toggleSidebar()">Add New Error</button>
-        </section>
+
     </div>
 
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
