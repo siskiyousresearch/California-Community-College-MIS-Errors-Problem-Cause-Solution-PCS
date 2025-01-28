@@ -170,7 +170,7 @@ async function loadCSV() {
 
             // Assuming the column indexes:
             const fileType = columns[2]?.replace(/"/g, '').trim();
-            const errorType = columns[8]?.replace(/"/g, '').trim(); // Assuming Error Type is the 9th column
+            const errorType = columns[1]?.replace(/"/g, '').trim(); // Assuming Error Type is the 9th column
 
             if (fileType) fileTypeSet.add(fileType);
             if (errorType) errorTypeSet.add(errorType);
