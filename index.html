@@ -185,16 +185,6 @@ async function loadCSV() {
             tbody.appendChild(tr);
         });
 
-        // Populate the File Type dropdown dynamically
-        const fileTypeFilter = document.getElementById('file-type-filter');
-        fileTypeFilter.innerHTML = '<option value="">Select File Type</option>'; // Reset options
-        fileTypeSet.forEach(type => {
-            const option = document.createElement('option');
-            option.value = type;
-            option.textContent = type;
-            fileTypeFilter.appendChild(option);
-        });
-
         // Populate the Error Type dropdown dynamically
         const errorTypeFilter = document.getElementById('error-type-filter');
         errorTypeFilter.innerHTML = '<option value="">Select Error Type</option>'; // Reset options
@@ -205,6 +195,18 @@ async function loadCSV() {
             errorTypeFilter.appendChild(option);
         });
 
+        // Populate the File Type dropdown dynamically
+        const fileTypeFilter = document.getElementById('file-type-filter');
+        fileTypeFilter.innerHTML = '<option value="">Select File Type</option>'; // Reset options
+        fileTypeSet.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            fileTypeFilter.appendChild(option);
+        });
+
+
+
     } catch (error) {
         console.error('Error loading CSV:', error);
     }
@@ -213,8 +215,8 @@ async function loadCSV() {
 
 function filterTable() {
     const sisFilter = document.getElementById('sis-filter').value.toLowerCase();
-    const fileTypeFilter = document.getElementById('file-type-filter').value.toLowerCase();
     const errorTypeFilter = document.getElementById('error-type-filter').value.toLowerCase();
+    const fileTypeFilter = document.getElementById('file-type-filter').value.toLowerCase();
     const searchValue = document.getElementById('search-input').value.toLowerCase();
 
     const rows = document.querySelectorAll('#errors-table tbody tr');
@@ -223,8 +225,8 @@ function filterTable() {
         const cells = Array.from(row.querySelectorAll('td'));
 
         const matchesSIS = sisFilter === '' || cells[0].textContent.toLowerCase() === sisFilter;
+        const matchesErrorType = errorTypeFilter === '' || cells[1].textContent.toLowerCase() === errorTypeFilter;
         const matchesFileType = fileTypeFilter === '' || cells[2].textContent.toLowerCase() === fileTypeFilter;
-        const matchesErrorType = errorTypeFilter === '' || cells[8].textContent.toLowerCase() === errorTypeFilter;
         const matchesSearch = cells.some(cell => cell.textContent.toLowerCase().includes(searchValue));
 
         if (matchesSIS && matchesFileType && matchesErrorType && matchesSearch) {
