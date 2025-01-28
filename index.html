@@ -259,16 +259,18 @@ async function submitData() {
 
     // Gather form data
     const sis = document.getElementById("sidebar-sis").value;
+    const errorType = document.getElementById("sidebar-error-type").value;
     const fileType = document.getElementById("sidebar-file-type").value;
     const dictionaryCode = document.getElementById("dictionary-code").value;
     const dictionaryValue = document.getElementById("dictionary-value").value;
     const errorDescription = document.getElementById("error-description").value;
     const info1 = document.getElementById("info1").value;
+    const info2 = document.getElementById("info2").value;
     const solution = document.getElementById("solution").value;
 
     // Format data to pass as an input
     const inputs = {
-        NEW_ROW: `"${sis}","${fileType}","${dictionaryCode}","${dictionaryValue}","${errorDescription}","${info1}","${solution}"`
+        NEW_ROW: `"${sis}","${errorType}","${fileType}","${dictionaryCode}","${dictionaryValue}","${errorDescription}","${info1}","${info2}","${solution}"`
     };
 
     try {
@@ -382,6 +384,16 @@ async function submitData() {
                 <option value="Other">Other</option>
             </select>
             <br/>
+            
+            <label for="sidebar-error-type">Error Type:</label>
+            <select id="sidebar-error-type" class="filter-dropdown">
+                <option value="">Select Error Type</option>
+                <option value="Syntactical">Syntactical</option>
+                <option value="Referential">Referential</option>
+                <option value="Quality">Quality</option>
+            </select>
+            <br/>
+            
             <label for="sidebar-file-type">File Type:</label>
             <select id="sidebar-file-type" class="filter-dropdown">
                 <option value="">Select File Type</option>
@@ -428,6 +440,9 @@ async function submitData() {
 
             <label for="info1">Info 1:</label>
             <input type="text" id="info1" placeholder="Enter additional info">
+
+            <label for="info2">Info 2:</label>
+            <input type="text" id="info2" placeholder="Enter additional info 2">
 
             <label for="solution">Solution:</label>
             <textarea id="solution" placeholder="Enter proposed solution"></textarea>
