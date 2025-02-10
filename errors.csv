@@ -14,4 +14,4 @@ Banner,Syntactical,SB,,,INCORRECT RECORD LENGTH FOR SB FILE,,,Check to see if th
 Banner,Syntactical,SB,SB15,Y,EDUCATION STATUS AND ENROLLMENT STATUS DO NOT AGREE  ,SSN/Snumber,,"Paired Error: SGASTDN>Learner>General Learner>""Sudent Type"" - Check the DED-Only one of these conditions can be true with the paired error-issue is mismatch between SB15/SB11- having a Y necessitates 10000 (special admit) but if no high school info is available then the Y needs to change- possibly to an X"
 Banner,Syntactical,SE,SE05,C,CALWORKS/TANF/AFDC DURATION MUST BE ENTERED FOR CARE STUDENTS,SSN/Snumber,,paired error If SE09 is Y SE05 must be N send to data steward to fix
 Banner,Syntactical,SE,SE09,Y,CALWORKS/TANF/AFDC DURATION MUST BE ENTERED FOR CARE STUDENTS,SSN/Snumber,,paired error If SE09 is Y SE05 must be N send to data steward to fix
-Banner,Syntactical,SG,SG15,2,INVALID VALUE,SSN/Snumber,,"If 2 is intended to be unknown, change value to X - ""unknown/unreported"""
+Banner,Syntactical,SG,SG15,2,INVALID VALUE,SSN/Snumber,,"If 2 is intended to be unknown change value to X - ""unknown/unreported"""
