@@ -26,3 +26,7 @@ Banner,Syntactical,SX,SX01,221010,DROP DATE MUST BE ON OR AFTER THE EFFECTIVE DA
 Banner,Syntactical,SX,SX02,221007,DROP DATE MUST BE ON OR AFTER THE EFFECTIVE DATE ,SSN/Snumber,CCC000611511,Convert the user ID to an Snumber and and CCC number to a CRN or Subj Code and check with A&R for a valid drop date
 Banner,Syntactical,SX,SX04,I,INVALID VALUE,SSN/Snumber,,I - is an invalid grade - check with A&R on changing this to a valid grade on the DED
 Banner,Syntactical,SX,SX04,XX,INVALID VALUE,SSN/Snumber,,"blank record - just got missed  - contact A&R to have this updated - SFAALST>Class Attendance Rosters>""Final Grade"""
+Banner,Syntactical,SX,SX02,220406,DROP DATE CAN ONLY BE REPORTED FOR DROPS AND WITHDRAWS  ,,,Student stopped coming to classes after the census - resolve issue with A&R
+Banner,Syntactical,SX,SX02,888888,DROPS AND WITHDRAWS MUST HAVE A VALID DROP DATE ,,,Dropped outside of the window - possibly extenuating circumstances - check with A&R to resolve
+Banner,Syntactical,SX,SX04,FW,DROP DATE CAN ONLY BE REPORTED FOR DROPS AND WITHDRAWS,,,Observational equivalent to an F grade - must have last date of attendance  - linked with a 888888 in SX02 - insert date there
+Banner,Syntactical,SX,SX04,EW,DROPS AND WITHDRAWS MUST HAVE A VALID DROP DATE       ,,,Excused withdraw - linked with SX02 888888 - check with A&R to insert a valid date
