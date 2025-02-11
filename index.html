@@ -45,14 +45,16 @@
         header nav a:hover {
             text-decoration: underline;
         }
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+.container {
+    max-width: 95%; /* Adjusts to 95% of the screen width */
+    width: 95%;
+    margin: 2rem auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Enables horizontal scrolling */
+}
         h1, h2, h3 {
             color: #333;
         }
@@ -89,7 +91,8 @@
             border: 1px solid #ddd;
         }
         th, td {
-            padding: 0.5rem;
+            padding: 0.4rem;
+            font-size: 0.9rem;
             text-align: left;
         }
         th {
@@ -345,7 +348,8 @@ async function submitData() {
 
                 <input type="text" id="search-input" class="search-input" placeholder="Search..." oninput="filterTable()">
             </div>
-
+            
+            <div style="overflow-x: auto;">
             <table id="errors-table">
                 <thead>
                     <tr>
@@ -364,7 +368,8 @@ async function submitData() {
                     <!-- Dynamic rows will be inserted here -->
                 </tbody>
             </table>
-        </section>
+        </section>'
+        </div>
 
 
     </div>
