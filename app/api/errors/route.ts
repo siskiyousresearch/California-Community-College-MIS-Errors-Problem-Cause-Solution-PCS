@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import errors from '@/public/errors.json';
+import { readErrors } from '@/lib/admin';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -8,7 +10,7 @@ export async function GET(request: NextRequest) {
   const fileType = searchParams.get('fileType');
   const q = searchParams.get('q');
 
-  let filtered = errors as Record<string, string>[];
+  let filtered = readErrors();
 
   if (system) {
     filtered = filtered.filter((e) => e.system === system);
