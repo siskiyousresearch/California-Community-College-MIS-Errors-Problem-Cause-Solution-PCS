@@ -1,19 +1,12 @@
 'use client';
 
 import { useState, useEffect, FormEvent } from 'react';
+import { SYSTEMS, ERROR_TYPES, FILE_TYPES } from '@/lib/constants';
 
 interface AddErrorPanelProps {
   open: boolean;
   onClose: () => void;
 }
-
-const SYSTEMS = ['Colleague', 'Banner', 'PeopleSoft', 'Other'];
-const ERROR_TYPES = ['Syntactical', 'Referential', 'Quality'];
-const FILE_TYPES = [
-  'SB', 'SG', 'CB', 'XF', 'XE', 'SX', 'SY', 'SC', 'CW', 'SD', 'SE', 'SM',
-  'SS', 'SV', 'SL', 'SA', 'AA', 'SF', 'FA', 'SP', 'EB', 'EJ', 'CC', 'GI',
-  'SI', 'SCD', 'STD', 'SXD', 'XBD', 'EBD', 'XB',
-];
 
 export default function AddErrorPanel({ open, onClose }: AddErrorPanelProps) {
   const [submitting, setSubmitting] = useState(false);
@@ -80,7 +73,7 @@ export default function AddErrorPanel({ open, onClose }: AddErrorPanelProps) {
       const data = await res.json();
 
       if (res.ok) {
-        setToast({ type: 'success', message: 'Error submitted successfully!' });
+        setToast({ type: 'success', message: 'Error submitted for review!' });
         resetForm();
         setTimeout(onClose, 1500);
       } else {

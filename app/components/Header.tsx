@@ -48,6 +48,12 @@ export default function Header() {
             >
               Add New Error
             </button>
+            <a
+              href="/admin"
+              className="text-[#003865] font-bold no-underline hover:underline"
+            >
+              Admin
+            </a>
           </nav>
         </div>
       </header>
