@@ -63,12 +63,17 @@ export default function ErrorEditModal({ error, onClose, onSaved }: ErrorEditMod
       if (res.ok) {
         const data = await res.json();
         onSaved(data.error);
+      } else if (res.status === 401) {
+        setErrorMsg('Session expired. Please log in again.');
+        window.location.href = '/admin/login';
+        return;
       } else {
-        const data = await res.json();
-        setErrorMsg(data.error || 'Failed to save.');
+        const data = await res.json().catch(() => null);
+        setErrorMsg(data?.error || `Save failed (${res.status})`);
       }
-    } catch {
-      setErrorMsg('Network error. Please try again.');
+    } catch (err) {
+      setErrorMsg(`Network error: ${err instanceof Error ? err.message : 'Please try again.'}`);
+
     } finally {
       setSaving(false);
     }

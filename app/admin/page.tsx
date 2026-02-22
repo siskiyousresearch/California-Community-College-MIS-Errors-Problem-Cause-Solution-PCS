@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PendingError {
   id: string;
@@ -17,13 +18,24 @@ interface PendingError {
 }
 
 export default function AdminPendingPage() {
+  const router = useRouter();
   const [pending, setPending] = useState<PendingError[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionId, setActionId] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  function showToast(type: 'success' | 'error', message: string) {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
+  }
 
   async function fetchPending() {
     try {
       const res = await fetch('/api/admin/pending');
+      if (res.status === 401) {
+        router.push('/admin/login');
+        return;
+      }
       if (res.ok) {
         setPending(await res.json());
       }
@@ -42,7 +54,15 @@ export default function AdminPendingPage() {
       const res = await fetch(`/api/admin/pending/${id}/approve`, { method: 'POST' });
       if (res.ok) {
         setPending((prev) => prev.filter((p) => p.id !== id));
+        showToast('success', 'Error approved and added to catalog.');
+      } else if (res.status === 401) {
+        router.push('/admin/login');
+      } else {
+        const data = await res.json().catch(() => null);
+        showToast('error', data?.error || `Approve failed (${res.status})`);
       }
+    } catch (err) {
+      showToast('error', `Approve failed: ${err instanceof Error ? err.message : 'Network error'}`);
     } finally {
       setActionId(null);
     }
@@ -55,7 +75,15 @@ export default function AdminPendingPage() {
       const res = await fetch(`/api/admin/pending/${id}/reject`, { method: 'POST' });
       if (res.ok) {
         setPending((prev) => prev.filter((p) => p.id !== id));
+        showToast('success', 'Submission rejected.');
+      } else if (res.status === 401) {
+        router.push('/admin/login');
+      } else {
+        const data = await res.json().catch(() => null);
+        showToast('error', data?.error || `Reject failed (${res.status})`);
       }
+    } catch (err) {
+      showToast('error', `Reject failed: ${err instanceof Error ? err.message : 'Network error'}`);
     } finally {
       setActionId(null);
     }
@@ -70,6 +98,14 @@ export default function AdminPendingPage() {
       <h3 className="text-xl font-bold text-[#003865] mb-4">
         Pending Submissions ({pending.length})
       </h3>
+
+      {toast && (
+        <div className={`mb-4 px-4 py-3 rounded text-sm font-medium ${
+          toast.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }`}>
+          {toast.message}
+        </div>
+      )}
 
       {pending.length === 0 ? (
         <p className="text-gray-500">No pending submissions.</p>

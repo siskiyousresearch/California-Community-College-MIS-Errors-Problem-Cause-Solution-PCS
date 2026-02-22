@@ -74,11 +74,9 @@ export function writeErrors(data: MISError[]) {
 export function getNextErrorId(errors: MISError[]): string {
   let maxNum = 0;
   for (const e of errors) {
-    const match = e.id.match(/^error-(\d+)$/);
-    if (match) {
-      const num = parseInt(match[1], 10);
-      if (num > maxNum) maxNum = num;
-    }
+    // Handle both "123" and "error-123" formats
+    const num = parseInt(e.id.replace(/^error-/, ''), 10);
+    if (!isNaN(num) && num > maxNum) maxNum = num;
   }
-  return `error-${maxNum + 1}`;
+  return String(maxNum + 1);
 }
