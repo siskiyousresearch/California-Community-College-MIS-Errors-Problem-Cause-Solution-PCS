@@ -1,24 +1,11 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-  --color-cccco-navy: #003865;
-  --color-cccco-navy-light: #0a5a9e;
-  --color-cccco-blue: #0073e6;
-  --color-cccco-blue-light: #3d9aff;
-}
-
 html {
   scroll-behavior: smooth;
 }
 
 body {
+  font-family: Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Dark mode transitions */
-html.dark {
-  color-scheme: dark;
 }
