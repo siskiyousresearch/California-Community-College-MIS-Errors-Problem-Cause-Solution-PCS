@@ -1,27 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readPending, writePending, readErrors, writeErrors, getNextErrorId } from '@/lib/admin';
+import { getPendingById, deletePending, insertError, getMaxErrorId } from '@/lib/admin';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const pending = readPending();
-  const index = pending.findIndex((p) => p.id === id);
+  const item = await getPendingById(id);
 
-  if (index === -1) {
+  if (!item) {
     return NextResponse.json({ error: 'Pending error not found' }, { status: 404 });
   }
 
-  const [item] = pending.splice(index, 1);
-  writePending(pending);
+  await deletePending(id);
 
-  const errors = readErrors();
-  const newId = getNextErrorId(errors);
+  const maxId = await getMaxErrorId();
+  const newId = String(maxId + 1);
   const { submittedAt, ...errorData } = item;
   const newError = { ...errorData, id: newId };
-  errors.push(newError);
-  writeErrors(errors);
+  await insertError(newError);
 
   return NextResponse.json({ success: true, error: newError });
 }

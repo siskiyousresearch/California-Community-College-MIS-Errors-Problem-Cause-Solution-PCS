@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readPending, writePending } from '@/lib/admin';
+import { insertPending } from '@/lib/admin';
 import { randomUUID } from 'crypto';
+
+export const dynamic = 'force-dynamic';
 
 const REQUIRED_FIELDS = ['system', 'errorType', 'fileType', 'description'];
 
@@ -20,8 +22,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const pending = readPending();
-  pending.push({
+  await insertPending({
     id: `pending-${randomUUID()}`,
     system: body.system,
     errorType: body.errorType,
@@ -34,7 +35,6 @@ export async function POST(request: NextRequest) {
     solution: body.solution || '',
     submittedAt: new Date().toISOString(),
   });
-  writePending(pending);
 
   return NextResponse.json({ success: true, message: 'Error submitted for review.' });
 }

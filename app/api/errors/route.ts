@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const fileType = searchParams.get('fileType');
   const q = searchParams.get('q');
 
-  let filtered = readErrors();
+  let filtered = await readErrors();
 
   if (system) {
     filtered = filtered.filter((e) => e.system === system);
